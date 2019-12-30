@@ -17,18 +17,13 @@ import javax.crypto.SecretKey;
 
 import org.apache.log4j.Logger;
 
+import static com.carloncho.code.keystore.util.UtilKeyStore.*;
+
+
 /**
  * Ejemplo de manejo de Secret key en Keystore
  * */
 public class SecretKeyInKeystore {
-
-	private static final String TIPO_KEYSTORE_JCEKS = "JCEKS"; 				//Tipo de Keystore para almacenar llaves secretas
-	private static final String ARCHIVO_KEY_STORE = "keystoreDemo.jceks"; 	//Nombre del archivo
-	private static final String FILE_PASSWORD = "hola123"; 					//Password del archivo
-	private static final String LLAVE = "llave3DES"; 						//Llave del entry para almacenar al keystore
-	private static final String LLAVE_PASSWORD = "keyPassword"; 			//Password del entry almacenado
-	private static final String ALGORITMO_AES = "AES"; 						//Algoritmo de encriptacion
-	private static final Integer TAMANIO_LLAVE = 256; 						//Tamaños de llave: 64, 128, 256
 	
 	private static final Logger LOGGER = Logger.getLogger(SecretKeyInKeystore.class.getName());
 	
@@ -40,7 +35,7 @@ public class SecretKeyInKeystore {
 	 * @throws CertificateException 
 	 * @throws NoSuchAlgorithmException 
 	 * */
-	private static KeyStore crearKeystore(String nombreArchivoKeystore, String passwordArchivo) 
+	public KeyStore crearKeystore(String nombreArchivoKeystore, String passwordArchivo) 
 			throws KeyStoreException, NoSuchAlgorithmException, CertificateException, FileNotFoundException, IOException  {
 		
 		File archivoKeystore = new File(nombreArchivoKeystore);
@@ -61,35 +56,7 @@ public class SecretKeyInKeystore {
 	}
 	
 	
-	/**
-	 * Se crea/carga el Keystore, genera la llave, se almacena el secret key y se obtiene del keystore.
-	 * */
-	public static void main(String[] args) {
 
-		SecretKey keyFound = null;
-				
-		try {
-			
-			KeyStore keyStore = crearKeystore(ARCHIVO_KEY_STORE, FILE_PASSWORD);
-			
-			SecretKey secretKey = generarLlave();
-			
-			KeyStore.PasswordProtection keyPassword = almacenarSecretKey(keyStore, secretKey);
-
-			keyFound = obtenerLlave(keyStore, keyPassword);
-			
-		} catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException | UnrecoverableEntryException | InvalidParameterException excep) {
-
-			LOGGER.error(excep);
-			
-		} finally {
-			
-			if(keyFound != null){
-				LOGGER.info("Llave encontrada: " + keyFound.toString());
-			}
-		}
-		
-	}
 
 	
 	/**
@@ -100,7 +67,7 @@ public class SecretKeyInKeystore {
 	 * @throws UnrecoverableEntryException
 	 * @throws KeyStoreException
 	 */
-	private static SecretKey obtenerLlave(KeyStore keyStore, KeyStore.PasswordProtection keyPassword)
+	public SecretKey obtenerLlave(KeyStore keyStore, KeyStore.PasswordProtection keyPassword)
 			throws NoSuchAlgorithmException, UnrecoverableEntryException, KeyStoreException {
 		
 		KeyStore.Entry entry = keyStore.getEntry(LLAVE, keyPassword);
@@ -113,7 +80,7 @@ public class SecretKeyInKeystore {
 	 * @return
 	 * @throws NoSuchAlgorithmException
 	 */
-	private static SecretKey generarLlave() throws NoSuchAlgorithmException, InvalidParameterException {
+	public SecretKey generarLlave() throws NoSuchAlgorithmException, InvalidParameterException {
 		
 		KeyGenerator keyGen = KeyGenerator.getInstance(ALGORITMO_AES);
 		keyGen.init(TAMANIO_LLAVE); 
@@ -131,7 +98,7 @@ public class SecretKeyInKeystore {
 	 * @throws CertificateException
 	 * @throws FileNotFoundException
 	 */
-	private static KeyStore.PasswordProtection almacenarSecretKey(KeyStore keyStore, SecretKey secretKey)
+	public KeyStore.PasswordProtection almacenarSecretKey(KeyStore keyStore, SecretKey secretKey)
 			throws KeyStoreException, IOException, NoSuchAlgorithmException, CertificateException,
 			FileNotFoundException {
 		
