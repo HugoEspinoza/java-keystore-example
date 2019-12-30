@@ -21,7 +21,7 @@ import static com.carloncho.code.keystore.util.UtilKeyStore.*;
 
 
 /**
- * Ejemplo de manejo de Secret key en Keystore
+ * Ejemplo de manejo de Secret key en Keystore en una clase y sin Spring.
  * */
 public class SecretKeyInKeystore {
 	

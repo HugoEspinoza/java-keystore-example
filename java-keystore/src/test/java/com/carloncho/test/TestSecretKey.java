@@ -10,6 +10,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 
+import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,13 @@ import static org.assertj.core.api.Assertions.*;
 import com.carloncho.code.keystore.SecretKeyInKeystore;
 import com.carloncho.code.keystore.context.ApplicationConfiguration;
 
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {ApplicationConfiguration.class})
 //@TestPropertySource("classpath:test.properties")
 public class TestSecretKey {
 
+	private static final Logger LOGGER = Logger.getLogger(TestSecretKey.class.getName());
 	
     @Autowired
     private SecretKeyInKeystore secretKeyInKeystoreService;
@@ -37,10 +40,14 @@ public class TestSecretKey {
     		
     		final KeyStore keyStore = secretKeyInKeystoreService.crearKeystore(ARCHIVO_KEY_STORE, FILE_PASSWORD);
     		File archivoKeystore = new File("keystoreDemo.jceks");
+    		
+    		LOGGER.debug("[keyStore]:" + keyStore.toString());
     		assertThat(archivoKeystore).exists().isFile().canRead();
     		
 		} catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException e) {
 			e.printStackTrace();
 		}
     }
+    
+    
 }
